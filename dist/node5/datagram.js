@@ -19,24 +19,17 @@ module.exports = function () {
     socket.once('listening', () => {
       const facade = tools.mixEventEmitter(socket, {
         address: socket.address.bind(socket),
-        send: function () {
-          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
+        send: (msg, port, address) => new Promise((resolve, reject) => {
+          if (closed) {
+            return reject(new Error('socket is closed'));
           }
-
-          return new Promise((resolve, reject) => {
-            if (closed) {
-              return reject(new Error('socket is closed'));
+          socket.send(msg, 0, msg.length, port, address, err => {
+            if (err) {
+              return reject(err);
             }
-            args.push(err => {
-              if (err) {
-                return reject(err);
-              }
-              resolve(facade);
-            });
-            socket.send(...args);
+            resolve(facade);
           });
-        },
+        }),
         close: () => new Promise((resolve, reject) => {
           // consider the socket as unusable from now on
           closed = true;

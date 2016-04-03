@@ -19,22 +19,17 @@ module.exports = function () {
     socket.once('listening', function () {
       var facade = tools.mixEventEmitter(socket, {
         address: socket.address.bind(socket),
-        send: function send() {
-          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-
+        send: function send(msg, port, address) {
           return new Promise(function (resolve, reject) {
             if (closed) {
               return reject(new Error('socket is closed'));
             }
-            args.push(function (err) {
+            socket.send(msg, 0, msg.length, port, address, function (err) {
               if (err) {
                 return reject(err);
               }
               resolve(facade);
             });
-            socket.send.apply(socket, args);
           });
         },
         close: function close() {
