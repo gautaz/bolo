@@ -30,15 +30,11 @@ module.exports = function () {
             resolve(facade);
           });
         }),
-        close: () => new Promise((resolve, reject) => {
+        close: () => new Promise(resolve => {
           // consider the socket as unusable from now on
           closed = true;
-          socket.close(err => {
-            if (err) {
-              return reject(err);
-            }
-            resolve(facade);
-          });
+          socket.once('close', () => resolve(facade));
+          socket.close();
         })
       });
 

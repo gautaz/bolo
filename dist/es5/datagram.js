@@ -33,15 +33,13 @@ module.exports = function () {
           });
         },
         close: function close() {
-          return new Promise(function (resolve, reject) {
+          return new Promise(function (resolve) {
             // consider the socket as unusable from now on
             closed = true;
-            socket.close(function (err) {
-              if (err) {
-                return reject(err);
-              }
-              resolve(facade);
+            socket.once('close', function () {
+              return resolve(facade);
             });
+            socket.close();
           });
         }
       });
