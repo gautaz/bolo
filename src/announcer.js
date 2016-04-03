@@ -34,7 +34,7 @@ module.exports = (options = {}) => require('./datagram')({
         return
       }
       if (Object.keys(ownAnnouncements).filter(
-          (address) => message.announce.address === address && ownAnnouncements[address].find((p) => p === message.announce.port)
+          (address) => message.announce.address === address && ownAnnouncements[address].indexOf(message.announce.port) > -1
         ).length) {
         log.debug(`[announcer] discarding ${msg.toString()} from ${c2s(rinfo)} (own announcement)`)
         return

@@ -51,9 +51,7 @@ module.exports = function () {
             };
           }
           if (Object.keys(ownAnnouncements).filter(function (address) {
-            return message.announce.address === address && ownAnnouncements[address].find(function (p) {
-              return p === message.announce.port;
-            });
+            return message.announce.address === address && ownAnnouncements[address].indexOf(message.announce.port) > -1;
           }).length) {
             log.debug('[announcer] discarding ' + msg.toString() + ' from ' + c2s(rinfo) + ' (own announcement)');
             return {
