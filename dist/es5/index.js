@@ -37,6 +37,7 @@ module.exports = function () {
 
       var facade = {
         close: function close() {
+          closed = true;
           return Promise.all(peers.mapData(function (peer) {
             return bolo.send(JSON.stringify({
               bolo: 'quit',
@@ -51,7 +52,15 @@ module.exports = function () {
             }), peer.port, peer.address).catch(function (error) {
               return log.warn('failed to quit from ' + inspect(peer) + ' (' + error + ')');
             });
-          })).then(announcer.close).then(bolo.close);
+          })).then(function () {
+            return Promise.all([announcer.close().catch(function (err) {
+              return log.warn('failed to close announcer (' + err + ')');
+            }), bolo.close().catch(function (err) {
+              return log.warn('failed to close (' + err + ')');
+            })]);
+          }).then(function () {
+            return events.emit('close');
+          });
         },
 
         set: function set(key, datum) {
@@ -218,9 +227,7 @@ module.exports = function () {
         }
       });
       bolo.on('close', function () {
-        closed = true;
         log.info('closed');
-        events.emit('close');
       });
 
       announcer.announce({

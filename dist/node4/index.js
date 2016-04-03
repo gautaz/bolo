@@ -34,11 +34,14 @@ module.exports = function () {
       const peerUrl = peer => `udp://${ peer.address }:${ peer.port }`;
 
       const facade = {
-        close: () => Promise.all(peers.mapData(peer => bolo.send(JSON.stringify({
-          bolo: 'quit',
-          quit: (options.bind.address ? [options.bind.address] : tools.externalAddresses().map(a => a.address)).map(address => peerUrl({ address: address, port: bolo.address().port })),
-          remove: myData.map(key => key)
-        }), peer.port, peer.address).catch(error => log.warn(`failed to quit from ${ inspect(peer) } (${ error })`)))).then(announcer.close).then(bolo.close),
+        close: () => {
+          closed = true;
+          return Promise.all(peers.mapData(peer => bolo.send(JSON.stringify({
+            bolo: 'quit',
+            quit: (options.bind.address ? [options.bind.address] : tools.externalAddresses().map(a => a.address)).map(address => peerUrl({ address: address, port: bolo.address().port })),
+            remove: myData.map(key => key)
+          }), peer.port, peer.address).catch(error => log.warn(`failed to quit from ${ inspect(peer) } (${ error })`)))).then(() => Promise.all([announcer.close().catch(err => log.warn(`failed to close announcer (${ err })`)), bolo.close().catch(err => log.warn(`failed to close (${ err })`))])).then(() => events.emit('close'));
+        },
 
         set: (key, datum) => {
           if (closed) {
@@ -178,9 +181,7 @@ module.exports = function () {
         }
       });
       bolo.on('close', () => {
-        closed = true;
         log.info('closed');
-        events.emit('close');
       });
 
       announcer.announce({

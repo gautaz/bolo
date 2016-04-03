@@ -34,10 +34,7 @@ bolo({ log: logger('A') }).then(function (bolo) {
   storeA.set('test', { test: true })
   return wait(500)
 }).then(function () {
-  storeA.close()
-  return wait(500)
-}).then(function () {
-  storeB.close()
+  return storeB.close()
 }).catch(function (error) {
   console.log(error.stack ? error.stack : error)
   process.exit(1)
