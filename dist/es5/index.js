@@ -83,10 +83,6 @@ module.exports = function () {
         },
 
         remove: function remove(key) {
-          var cb = arguments.length <= 1 || arguments[1] === undefined ? function () {
-            return undefined;
-          } : arguments[1];
-
           if (closed) {
             Promise.reject(new Error('closed'));
           }

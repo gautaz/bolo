@@ -57,7 +57,7 @@ module.exports = (options = {}) => Promise.all([
       ).then(() => facade)
     },
 
-    remove: (key, cb = () => undefined) => {
+    remove: (key) => {
       if (closed) { Promise.reject(new Error('closed')) }
       myData.remove(key)
       return Promise.all(

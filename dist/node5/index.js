@@ -54,9 +54,7 @@ module.exports = function () {
           }), peer.port, peer.address).catch(err => log.warn(`failed to set ${ key } on ${ inspect(peer) } (${ err })`)))).then(() => facade);
         },
 
-        remove: function (key) {
-          let cb = arguments.length <= 1 || arguments[1] === undefined ? () => undefined : arguments[1];
-
+        remove: key => {
           if (closed) {
             Promise.reject(new Error('closed'));
           }
