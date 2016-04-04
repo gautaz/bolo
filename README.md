@@ -1,5 +1,7 @@
 # Bolo
 
+[![Build Status](https://travis-ci.org/gautaz/bolo.svg?branch=master)](https://travis-ci.org/gautaz/bolo)
+
 ![bolo logo](bolo.jpg)
 
 Bolo is intended to provide a distributed key-value store for Node.js without relying on any external resources (a.k.a. [etcd](https://coreos.com/etcd/), [consul](https://www.consul.io/) and co).
@@ -138,9 +140,12 @@ The options are:
 }
 ```
 
-By default, none of these options are set which means that the `get` will block indefinitely if the binding for the asked `key` is never defined and the node will not ask its peers for the binding on a regular basis.
+By default, none of these options are set which means that:
 
-Note that these strategies are only needed if you cannot rely on the network and some UDP packets are lost from time to time.
+- the `get` will block indefinitely if the binding for the asked `key` is not already set and not set by anyone later
+- the node will not ask its peers for the binding on a regular basis to alleviate any UDP datagrams loss (like a lost `set` message)
+
+> The askInterval option is only needed if you cannot rely on the network and some UDP packets are lost from time to time.
 
 ### Closing the node
 
