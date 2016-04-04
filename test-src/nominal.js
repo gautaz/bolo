@@ -23,6 +23,16 @@ describe('nominal', () => {
   it('gets a store and closes it', () => bolo().then(bolo.close))
 
   it(
+    'gets a store, ensures it accesses its own data and closes it',
+    () => bolo()
+    .then((store) => store.set('key', 'value'))
+    .then((store) => Promise.all([
+      store,
+      expect(store.get('key')).to.eventually.equal('value')
+    ])).then(([store]) => store.close())
+  )
+
+  it(
     'gets two stores, ensures they share data and closes them',
     () => Promise.all([bolo(), bolo()])
       .then(([storeA, storeB]) => Promise.all([storeA.set('keyA', 'valueA'), storeB.set('keyB', 'valueB')]))
