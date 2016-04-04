@@ -39,6 +39,10 @@
     "parser": "babel-eslint"
   },
   "author": "gautaz",
+  "repository": "gautaz/bolo",
+  "bugs": {
+    "url": "https://github.com/gautaz/bolo/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "pinkie-promise": "2.0.0"
