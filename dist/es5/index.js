@@ -141,7 +141,9 @@ module.exports = function () {
               }, options.askInterval);
             }
 
-            facade.on('set', resolver);
+            facade.on('set', function (k, d) {
+              return k === key ? resolve(d) : undefined;
+            });
           });
         }
       };

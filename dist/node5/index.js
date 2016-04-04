@@ -101,7 +101,7 @@ module.exports = function () {
               }, options.askInterval);
             }
 
-            facade.on('set', resolver);
+            facade.on('set', (k, d) => k === key ? resolve(d) : undefined);
           });
         }
       };
