@@ -12,7 +12,8 @@
     "node4-test": "babel test-src -d test --presets es2015-node4",
     "node5-test": "babel test-src -d test --presets node5",
     "standard": "(cd src && standard) && (cd example && standard)",
-    "test": "npm run standard && npm run `node dist.js`-test && istanbul cover _mocha --recursive test && opener coverage/lcov-report/index.html"
+    "test": "npm run standard && npm run `node dist.js`-test && istanbul cover _mocha --recursive test && opener coverage/lcov-report/index.html",
+    "doc": "markdown-preview README.md"
   },
   "keywords": [
     "key-value",
@@ -28,6 +29,7 @@
     "chai": "3.5.0",
     "chai-as-promised": "5.3.0",
     "istanbul": "0.4.2",
+    "markdown-preview": "0.3.6",
     "mocha": "2.4.5",
     "opener": "1.4.1",
     "standard": "6.0.8",
