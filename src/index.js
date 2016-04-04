@@ -74,6 +74,7 @@ module.exports = (options = {}) => Promise.all([
       const stored = myData.get(key) || theirData.get(key)
       const resolver = (k, d) => {
         if (k === key) {
+          facade.removeListener('set', resolver)
           clearTimeout(timeout)
           clearInterval(askInterval)
           resolve(d)
@@ -85,6 +86,7 @@ module.exports = (options = {}) => Promise.all([
       if (options.timeout) {
         timeout = setTimeout(() => {
           facade.removeListener('set', resolver)
+          clearInterval(askInterval)
           reject(new Error(`${key} was not found`))
         }, options.timeout)
       }
@@ -100,7 +102,7 @@ module.exports = (options = {}) => Promise.all([
         }, options.askInterval)
       }
 
-      facade.on('set', (k, d) => k === key ? resolve(d) : undefined)
+      facade.on('set', resolver)
     })
   }
 

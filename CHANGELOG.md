@@ -2,6 +2,7 @@
 
 ## current revision
 
+- fix mess in get method
 - `npm test` now only operates test and not coverage (`npm run cover`)
 - added mainly API documentation
 - added missing GitHub data

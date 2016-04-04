@@ -107,6 +107,7 @@ module.exports = function () {
             var stored = myData.get(key) || theirData.get(key);
             var resolver = function resolver(k, d) {
               if (k === key) {
+                facade.removeListener('set', resolver);
                 clearTimeout(timeout);
                 clearInterval(askInterval);
                 resolve(d);
@@ -120,6 +121,7 @@ module.exports = function () {
             if (options.timeout) {
               timeout = setTimeout(function () {
                 facade.removeListener('set', resolver);
+                clearInterval(askInterval);
                 reject(new Error(key + ' was not found'));
               }, options.timeout);
             }
@@ -137,9 +139,7 @@ module.exports = function () {
               }, options.askInterval);
             }
 
-            facade.on('set', function (k, d) {
-              return k === key ? resolve(d) : undefined;
-            });
+            facade.on('set', resolver);
           });
         }
       };
