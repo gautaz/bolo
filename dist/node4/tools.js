@@ -1,17 +1,11 @@
 'use strict';
 
 const os = require('os');
-const inspect = require('util').inspect;
 
 const dottedToInt = a => a.split('.').map(d => parseInt(d, 10));
 const defaultMask = a => [255, a[0] < 128 ? 0 : 255, a[0] < 192 ? 0 : 255, a[0] < 224 ? 0 : 255];
 
 module.exports = {
-  spy: thing => {
-    console.log(inspect(thing));
-    return thing;
-  },
-
   noLog: { debug: () => undefined, info: () => undefined, warn: () => undefined, error: () => undefined },
 
   cnx2str: connection => `${ connection.address }:${ connection.port }`,

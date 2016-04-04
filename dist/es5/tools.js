@@ -1,7 +1,6 @@
 'use strict';
 
 var os = require('os');
-var inspect = require('util').inspect;
 
 var dottedToInt = function dottedToInt(a) {
   return a.split('.').map(function (d) {
@@ -13,11 +12,6 @@ var defaultMask = function defaultMask(a) {
 };
 
 module.exports = {
-  spy: function spy(thing) {
-    console.log(inspect(thing));
-    return thing;
-  },
-
   noLog: { debug: function debug() {
       return undefined;
     }, info: function info() {
