@@ -9,13 +9,7 @@ const Promise = require('pinkie-promise')
 const chai = require('chai')
 const expect = chai.expect
 
-const log = (prefix) => ({
-  debug: (...args) => console.log('debug', prefix, ...args),
-  info: (...args) => console.log('info', prefix, ...args),
-  warn: (...args) => console.log('warn', prefix, ...args),
-  error: (...args) => console.log('error', prefix, ...args)
-})
-log('used')
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 chai.use(require('chai-as-promised'))
 
@@ -23,17 +17,18 @@ describe('nominal', () => {
   it('gets a store and closes it', () => bolo().then(bolo.close))
 
   it(
-    'gets a store, ensures it accesses its own data and closes it',
+    'accesses its own data then removes the data',
     () => bolo()
-    .then((store) => store.set('key', 'value'))
-    .then((store) => Promise.all([
-      store,
-      expect(store.get('key')).to.eventually.equal('value')
-    ])).then(([store]) => store.close())
+      .then((store) => store.set('key', 'value'))
+      .then((store) => Promise.all([
+        store,
+        expect(store.get('key')).to.eventually.equal('value')
+      ])).then(([store]) => store.remove('key'))
+      .then((store) => store.close)
   )
 
   it(
-    'gets two stores, ensures they share data and closes them',
+    'gets two stores, ensures they share data then closes them',
     () => Promise.all([bolo(), bolo()])
       .then(([storeA, storeB]) => Promise.all([storeA.set('keyA', 'valueA'), storeB.set('keyB', 'valueB')]))
       .then(([storeA, storeB]) => Promise.all([
@@ -41,6 +36,12 @@ describe('nominal', () => {
         storeB,
         expect(storeA.get('keyB')).to.eventually.equal('valueB'),
         expect(storeB.get('keyA')).to.eventually.equal('valueA')
+      ])).then(([storeA, storeB]) => Promise.all([storeA.remove('keyA'), storeB.remove('keyB'), wait(50)]))
+      .then(([storeA, storeB]) => Promise.all([
+        storeA,
+        storeB,
+        expect(storeA.get('keyB', { timeout: 50 })).to.be.rejected,
+        expect(storeB.get('keyA', { timeout: 50 })).to.be.rejected
       ])).then(([storeA, storeB]) => Promise.all([storeA.close(), storeB.close()]))
   )
 })
