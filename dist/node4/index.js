@@ -40,7 +40,7 @@ module.exports = function () {
             bolo: 'quit',
             quit: (options.bind.address ? [options.bind.address] : tools.externalAddresses().map(a => a.address)).map(address => peerUrl({ address: address, port: bolo.address().port })),
             remove: myData.map(key => key)
-          }), peer.port, peer.address).catch(error => log.warn(`failed to quit from ${ inspect(peer) } (${ error })`)))).then(() => Promise.all([announcer.close().catch(err => log.warn(`failed to close announcer (${ err })`)), bolo.close().catch(err => log.warn(`failed to close (${ err })`))])).then(() => events.emit('close'));
+          }), peer.port, peer.address).catch(error => log.warn(`failed to quit from ${ inspect(peer) } (${ error })`)))).then(() => Promise.all([announcer.close().catch(err => log.warn(`failed to close announcer (${ err })`)), bolo.close().catch(err => log.warn(`failed to close (${ err })`))])).then(() => events.emit('close')).then(() => facade);
         },
 
         set: (key, datum) => {
@@ -51,7 +51,7 @@ module.exports = function () {
           return Promise.all(peers.mapData(peer => bolo.send(JSON.stringify({
             bolo: 'set',
             set: [{ key: key, datum: datum }]
-          }), peer.port, peer.address).catch(err => log.warn(`failed to set ${ key } on ${ inspect(peer) } (${ err })`))));
+          }), peer.port, peer.address).catch(err => log.warn(`failed to set ${ key } on ${ inspect(peer) } (${ err })`)))).then(() => facade);
         },
 
         remove: function remove(key) {
@@ -64,7 +64,7 @@ module.exports = function () {
           return Promise.all(peers.mapData(peer => bolo.send(JSON.stringify({
             bolo: 'remove',
             remove: [key]
-          }), peer.port, peer.address).catch(err => log.warn(`failed to remove ${ key } from ${ inspect(peer) } (${ err })`))));
+          }), peer.port, peer.address).catch(err => log.warn(`failed to remove ${ key } from ${ inspect(peer) } (${ err })`)))).then(() => facade);
         },
 
         get: function get(key) {

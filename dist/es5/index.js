@@ -60,6 +60,8 @@ module.exports = function () {
             })]);
           }).then(function () {
             return events.emit('close');
+          }).then(function () {
+            return facade;
           });
         },
 
@@ -75,7 +77,9 @@ module.exports = function () {
             }), peer.port, peer.address).catch(function (err) {
               return log.warn('failed to set ' + key + ' on ' + inspect(peer) + ' (' + err + ')');
             });
-          }));
+          })).then(function () {
+            return facade;
+          });
         },
 
         remove: function remove(key) {
@@ -94,7 +98,9 @@ module.exports = function () {
             }), peer.port, peer.address).catch(function (err) {
               return log.warn('failed to remove ' + key + ' from ' + inspect(peer) + ' (' + err + ')');
             });
-          }));
+          })).then(function () {
+            return facade;
+          });
         },
 
         get: function get(key) {

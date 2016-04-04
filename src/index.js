@@ -43,25 +43,29 @@ module.exports = (options = {}) => Promise.all([
       ))).then(() => Promise.all([
         announcer.close().catch((err) => log.warn(`failed to close announcer (${err})`)),
         bolo.close().catch((err) => log.warn(`failed to close (${err})`))
-      ])).then(() => events.emit('close'))
+      ])).then(() => events.emit('close')).then(() => facade)
     },
 
     set: (key, datum) => {
       if (closed) { Promise.reject(new Error('closed')) }
       myData.set(key, datum)
-      return Promise.all(peers.mapData((peer) => bolo.send(JSON.stringify({
-        bolo: 'set',
-        set: [{ key, datum }]
-      }), peer.port, peer.address).catch((err) => log.warn(`failed to set ${key} on ${inspect(peer)} (${err})`))))
+      return Promise.all(
+        peers.mapData((peer) => bolo.send(JSON.stringify({
+          bolo: 'set',
+          set: [{ key, datum }]
+        }), peer.port, peer.address).catch((err) => log.warn(`failed to set ${key} on ${inspect(peer)} (${err})`)))
+      ).then(() => facade)
     },
 
     remove: (key, cb = () => undefined) => {
       if (closed) { Promise.reject(new Error('closed')) }
       myData.remove(key)
-      return Promise.all(peers.mapData((peer) => bolo.send(JSON.stringify({
-        bolo: 'remove',
-        remove: [key]
-      }), peer.port, peer.address).catch((err) => log.warn(`failed to remove ${key} from ${inspect(peer)} (${err})`))))
+      return Promise.all(
+        peers.mapData((peer) => bolo.send(JSON.stringify({
+          bolo: 'remove',
+          remove: [key]
+        }), peer.port, peer.address).catch((err) => log.warn(`failed to remove ${key} from ${inspect(peer)} (${err})`)))
+      ).then(() => facade)
     },
 
     get: (key, options = {}) => new Promise((resolve, reject) => {
