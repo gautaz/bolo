@@ -2,6 +2,7 @@
 
 ## current revision
 
+- added a [Travis CI](https://travis-ci.org/) configuration file
 - clarify README.md
 
 ## 2016-04-04 / v0.0.2
