@@ -11,8 +11,10 @@
     "es5-test": "babel test-src -d test --presets es2015",
     "node4-test": "babel test-src -d test --presets es2015-node4",
     "node5-test": "babel test-src -d test --presets node5",
-    "standard": "(cd src && standard) && (cd example && standard)",
-    "test": "npm run standard && npm run `node dist.js`-test && istanbul cover _mocha --recursive test && opener coverage/lcov-report/index.html",
+    "standard": "(cd src && standard) && (cd example && standard) && (cd test-src && standard)",
+    "pre-test": "npm run standard && npm run `node dist.js`-test",
+    "test": "npm run pre-test && mocha --recursive test",
+    "cover": "npm run pre-test && istanbul cover _mocha --recursive test && opener coverage/lcov-report/index.html",
     "doc": "markdown-preview README.md"
   },
   "keywords": [
