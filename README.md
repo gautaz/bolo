@@ -93,13 +93,13 @@ You can pass the following options:
 }
 ```
 
-By default no logging is operated but you can provide an alternate logger providing the `debug`, `info`, `warn` and `error` methods, these methods should accept a string as its first argument.
+By default no logging is operated but you can provide an alternate logger providing the `debug`, `info`, `warn` and `error` methods, these methods should accept a string as their first argument.
 
 By default the node will announce itself on all available interfaces on the port 60105 and also talk to other nodes on all interfaces on a random port.
 
 ### Setting a key/value binding
 
-A `key` can only be expressed as a string but the only requisite for a value is for `JSON.parse º JSON.stringify` to be idempotent with it.
+A `key` can only be expressed as a string but the only requisite for a value is that `JSON.parse(JSON.stringify(value))` deep equals `value`.
 
 You can set a binding with:
 
@@ -107,7 +107,7 @@ You can set a binding with:
 node.set(key, value)
 ```
 
-This will return a [Promise][2] which will resolve with the node on success (to possibly chain calls) or reject with an [Error][1].
+This will return a [Promise][2] which will resolve to the node on success (to possibly chain calls) or reject with an [Error][1].
 
 ### Removing a binding for a key
 
@@ -127,7 +127,7 @@ You can get a value by calling:
 node.get(key, options)
 ```
 
-This method will return a [Promise][2] resolving to the value corresponding to the `key` (or possibly reject).
+This method will return a [Promise][2] resolving to the value bound to the `key` (or possibly reject).
 
 The options are:
 

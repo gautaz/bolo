@@ -2,6 +2,10 @@
 
 ## current revision
 
+- clarify README.md
+
+## 2016-04-04 / v0.0.2
+
 - improve nominal test case
 - fix bad property on remove
 - fix mess in get method
