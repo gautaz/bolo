@@ -130,7 +130,7 @@ module.exports = function () {
 
         remove: (message, rinfo) => {
           checkPeer(rinfo);
-          message.set.map(key => theirData.remove(key));
+          message.remove.map(key => theirData.remove(key));
         },
 
         ask: (message, rinfo) => {

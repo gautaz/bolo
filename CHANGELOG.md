@@ -2,6 +2,7 @@
 
 ## current revision
 
+- fix bad property on remove
 - fix mess in get method
 - `npm test` now only operates test and not coverage (`npm run cover`)
 - added mainly API documentation

@@ -168,7 +168,7 @@ module.exports = function () {
 
         remove: function remove(message, rinfo) {
           checkPeer(rinfo);
-          message.set.map(function (key) {
+          message.remove.map(function (key) {
             return theirData.remove(key);
           });
         },
