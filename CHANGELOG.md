@@ -2,6 +2,7 @@
 
 ## current revision
 
+- added mainly API documentation
 - added missing GitHub data
 - removed residue of the old callback interface
 
