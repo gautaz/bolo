@@ -1,6 +1,8 @@
 # Bolo changelog
 
-## current revision
+## Current revision
+
+## 2016-04-05 / v0.0.3
 
 - fix closing issues
 - debug logging at datagram level
