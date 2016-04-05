@@ -16,6 +16,7 @@ const ensureBindingOptions = function () {
 module.exports = function () {
   let options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   return require('./datagram')({
+    log: options.log || tools.noLog,
     socket: { type: 'udp4', reuseAddr: true },
     bind: ensureBindingOptions(options.bind),
     broadcast: true

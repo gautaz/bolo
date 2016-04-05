@@ -4,21 +4,27 @@ const tools = require('./tools')
 
 module.exports = (options = {}) => new Promise((resolve, reject) => {
   const socket = dgram.createSocket(options.socket || {})
+  const log = options.log || tools.noLog
   let closed = false
 
   socket.once('error', (err) => {
+    log.debug(`[socket] error on creation: ${err}`)
     socket.removeAllListeners('error')
     socket.removeAllListeners('listening')
     reject(err)
   })
 
   socket.once('listening', () => {
+    const c2s = tools.cnx2str(socket.address())
+    log.debug(`[socket ${c2s}] listening`)
+
     const facade = tools.mixEventEmitter(socket, {
       address: socket.address.bind(socket),
       send: (msg, port, address) => new Promise((resolve, reject) => {
         if (closed) {
           return reject(new Error('socket is closed'))
         }
+        log.debug(`[socket ${c2s}] sending ${msg.toString()} to ${address}:${port}`)
         socket.send(msg, 0, msg.length, port, address, (err) => {
           if (err) {
             return reject(err)
@@ -29,6 +35,7 @@ module.exports = (options = {}) => new Promise((resolve, reject) => {
       close: () => new Promise((resolve) => {
         // consider the socket as unusable from now on
         closed = true
+        log.debug(`[socket ${c2s}] closing`)
         socket.once('close', () => resolve(facade))
         socket.close()
       })

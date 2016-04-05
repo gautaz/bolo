@@ -8,8 +8,8 @@ const announcer = require('./announcer')
 const c2s = tools.cnx2str
 
 module.exports = (options = {}) => Promise.all([
-  announcer({ log: options.log || tools.noLog, bind: options.announce }),
-  require('./datagram')({ socket: { type: 'udp4' }, bind: options.bind || {} })
+  announcer({ log: options.log, bind: options.announce }),
+  require('./datagram')({ log: options.log, socket: { type: 'udp4' }, bind: options.bind })
 ]).then(([announcer, bolo]) => new Promise((resolve, reject) => {
   options.bind = options.bind || {}
 

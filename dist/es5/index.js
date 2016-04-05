@@ -13,7 +13,7 @@ var c2s = tools.cnx2str;
 
 module.exports = function () {
   var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-  return Promise.all([announcer({ log: options.log || tools.noLog, bind: options.announce }), require('./datagram')({ socket: { type: 'udp4' }, bind: options.bind || {} })]).then(function (_ref) {
+  return Promise.all([announcer({ log: options.log, bind: options.announce }), require('./datagram')({ log: options.log, socket: { type: 'udp4' }, bind: options.bind })]).then(function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2);
 
     var announcer = _ref2[0];

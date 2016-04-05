@@ -2,6 +2,7 @@
 
 ## current revision
 
+- debug logging at datagram level
 - Travis badge and git depth
 - added a [Travis CI](https://travis-ci.org/) configuration file
 - clarify README.md
