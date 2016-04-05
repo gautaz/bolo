@@ -72,9 +72,16 @@ module.exports = (options = {}) => Promise.all([
       let timeout = null
       let askInterval = null
       const stored = myData.get(key) || theirData.get(key)
+      const closeHandler = () => {
+        facade.removeListener('set', resolver)
+        clearTimeout(timeout)
+        clearInterval(askInterval)
+        reject(new Error('closed'))
+      }
       const resolver = (k, d) => {
         if (k === key) {
           facade.removeListener('set', resolver)
+          facade.removeListener('close', closeHandler)
           clearTimeout(timeout)
           clearInterval(askInterval)
           resolve(d)
@@ -83,9 +90,12 @@ module.exports = (options = {}) => Promise.all([
 
       if (typeof stored !== 'undefined') { return resolve(stored) }
 
+      if (closed) { reject(new Error('closed')) }
+
       if (options.timeout) {
         timeout = setTimeout(() => {
           facade.removeListener('set', resolver)
+          facade.removeListener('close', closeHandler)
           clearInterval(askInterval)
           reject(new Error(`${key} was not found`))
         }, options.timeout)
@@ -102,6 +112,7 @@ module.exports = (options = {}) => Promise.all([
         }, options.askInterval)
       }
 
+      facade.on('close', closeHandler)
       facade.on('set', resolver)
     })
   }

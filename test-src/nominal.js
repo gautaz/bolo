@@ -14,7 +14,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 chai.use(require('chai-as-promised'))
 
 describe('nominal', () => {
-  it('gets a store and closes it', () => bolo().then(bolo.close))
+  it('gets a store and closes it', () => bolo().then((store) => store.close()))
 
   it(
     'accesses its own data then removes the data',
@@ -24,7 +24,7 @@ describe('nominal', () => {
         store,
         expect(store.get('key')).to.eventually.equal('value')
       ])).then(([store]) => store.remove('key'))
-      .then((store) => store.close)
+      .then((store) => store.close())
   )
 
   it(

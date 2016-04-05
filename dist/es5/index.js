@@ -105,9 +105,16 @@ module.exports = function () {
             var timeout = null;
             var askInterval = null;
             var stored = myData.get(key) || theirData.get(key);
+            var closeHandler = function closeHandler() {
+              facade.removeListener('set', resolver);
+              clearTimeout(timeout);
+              clearInterval(askInterval);
+              reject(new Error('closed'));
+            };
             var resolver = function resolver(k, d) {
               if (k === key) {
                 facade.removeListener('set', resolver);
+                facade.removeListener('close', closeHandler);
                 clearTimeout(timeout);
                 clearInterval(askInterval);
                 resolve(d);
@@ -118,9 +125,14 @@ module.exports = function () {
               return resolve(stored);
             }
 
+            if (closed) {
+              reject(new Error('closed'));
+            }
+
             if (options.timeout) {
               timeout = setTimeout(function () {
                 facade.removeListener('set', resolver);
+                facade.removeListener('close', closeHandler);
                 clearInterval(askInterval);
                 reject(new Error(key + ' was not found'));
               }, options.timeout);
@@ -139,6 +151,7 @@ module.exports = function () {
               }, options.askInterval);
             }
 
+            facade.on('close', closeHandler);
             facade.on('set', resolver);
           });
         }
