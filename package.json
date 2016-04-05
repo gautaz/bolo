@@ -1,6 +1,6 @@
 {
   "name": "bolo",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "bolo provides a distributed key-value store with peers relying on UDP communication",
   "main": "index.js",
   "scripts": {
