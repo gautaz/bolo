@@ -29,6 +29,12 @@ Bolo is not designed to handle conflicting key/value bindings but if a conflict 
 
 ## First steps
 
+Get the *bolo* module by issuing:
+
+```bash
+npm install bolo
+```
+
 The following code samples rely on [ES6](http://www.ecma-international.org/ecma-262/6.0/index.html).
 
 Bolo API relies on promises, in order to get a bolo node, simply issue:
