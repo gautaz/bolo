@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/gautaz/bolo.svg?branch=master)](https://travis-ci.org/gautaz/bolo)
 [![Coverage Status](https://coveralls.io/repos/github/gautaz/bolo/badge.svg?branch=master)](https://coveralls.io/github/gautaz/bolo?branch=master)
+[![Dependency Status](https://david-dm.org/gautaz/bolo.svg)](https://david-dm.org/gautaz/bolo)
+[![devDependency Status](https://david-dm.org/gautaz/bolo/dev-status.svg)](https://david-dm.org/gautaz/bolo#info=devDependencies)
 
 ![bolo logo](bolo.jpg)
 
