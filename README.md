@@ -1,6 +1,7 @@
 # Bolo
 
 [![Build Status](https://travis-ci.org/gautaz/bolo.svg?branch=master)](https://travis-ci.org/gautaz/bolo)
+[![Coverage Status](https://coveralls.io/repos/github/gautaz/bolo/badge.svg?branch=master)](https://coveralls.io/github/gautaz/bolo?branch=master)
 
 ![bolo logo](bolo.jpg)
 
